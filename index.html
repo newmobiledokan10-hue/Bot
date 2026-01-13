@@ -46,7 +46,6 @@ main{flex-grow:1;overflow-y:auto;padding:20px;padding-bottom:80px;}
 .list-item .info .name{font-weight:600;font-size:15px;}
 .list-item .info .detail{font-size:13px;color:var(--text-muted-color);}
 .list-item .score{font-size:16px;font-weight:700;color:var(--accent-color);}
-.history-icon{color:var(--primary-color);margin-right:15px;font-size:18px;}
 .footer-nav{position:fixed;bottom:0;left:0;right:0;width:100%;max-width:400px;margin:0 auto;display:flex;justify-content:space-around;background:var(--secondary-color);padding:10px 0;border-top:1px solid rgba(255,255,255,0.1);}
 .nav-button{display:flex;flex-direction:column;align-items:center;color:var(--text-muted-color);background:none;border:none;font-size:12px;transition:color 0.2s ease,transform 0.2s ease;cursor:pointer;padding:5px 10px;}
 .nav-button .icon{font-size:22px;margin-bottom:4px;}
@@ -66,18 +65,15 @@ main{flex-grow:1;overflow-y:auto;padding:20px;padding-bottom:80px;}
 .modal-actions{display:flex;gap:10px;}
 </style>
 
-<script src="//libtl.com/sdk.js" data-zone="10456374" data-sdk="show_10456374"></script>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 </head>
 <body>
 <div class="container">
 <main id="main-content">
 
-<!-- HOME VIEW -->
 <div id="home-view" class="view active">
   <div class="user-header-card">
     <div class="user-avatar" id="profile-pic">EE</div>
@@ -98,30 +94,23 @@ main{flex-grow:1;overflow-y:auto;padding:20px;padding-bottom:80px;}
       <div class="task-details"><h3>View Tasks</h3><p>Watch ads and complete tasks to earn points.</p></div>
       <div class="task-arrow"><i class="fa-solid fa-chevron-right"></i></div>
   </div>
-  <div class="task-card" onclick="openWithdrawModal()">
+  <div class="task-card" onclick="showView('withdraw-view')">
       <div class="task-icon"><i class="fa-solid fa-wallet"></i></div>
-      <div class="task-details"><h3>Withdraw Funds</h3><p>Request to withdraw your available balance.</p></div>
+      <div class="task-details"><h3>Withdraw Funds</h3><p>Request withdrawal safely.</p></div>
       <div class="task-arrow"><i class="fa-solid fa-chevron-right"></i></div>
   </div>
 </div>
 
-<!-- TASKS VIEW -->
 <div id="tasks-view" class="view">
   <h2 class="section-title">Earning Tasks</h2>
   <div id="tasks-container"></div>
 </div>
 
-<!-- LEADERBOARD VIEW -->
-<div id="leaderboard-view" class="view">
-  <h2 class="section-title">Top Earners</h2>
-  <div id="leaderboard-list"></div>
+<div id="withdraw-view" class="view">
+  <h2 class="section-title">Withdraw</h2>
+  <div id="withdraw-content"></div>
 </div>
 
-<!-- HISTORY VIEW -->
-<div id="history-view" class="view">
-  <h2 class="section-title">Recent Activity</h2>
-  <div id="history-list"></div>
-</div>
 </main>
 
 <nav class="footer-nav">
@@ -131,197 +120,172 @@ main{flex-grow:1;overflow-y:auto;padding:20px;padding-bottom:80px;}
   <button class="nav-button" onclick="showView('history-view')"><i class="icon fa-solid fa-clock-rotate-left"></i>History</button>
   <button class="nav-button" onclick="shareApp()"><i class="icon fa-solid fa-share-nodes"></i>Share</button>
 </nav>
-</div>
-
-<!-- WITHDRAWAL MODAL -->
-<div class="modal-overlay" id="withdraw-modal">
-  <div class="modal-content">
-      <h3>Confirm Withdrawal</h3>
-      <p>You are about to request a withdrawal of your entire balance. Please confirm.</p>
-      <div class="modal-actions">
-          <button class="action-button secondary-button" onclick="closeWithdrawModal()">Cancel</button>
-          <button class="action-button primary-button" onclick="requestWithdraw()">Confirm</button>
-      </div>
-  </div>
-</div>
 
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyC7a4OIp3viWGNq_jIYoq-4qtKIYqMocmE",
   authDomain: "iran7usd.firebaseapp.com",
-  databaseURL: "https://iran7usd-default-rtdb.firebaseio.com",
   projectId: "iran7usd",
-  storageBucket: "iran7usd.firebasestorage.app",
+  storageBucket: "iran7usd.appspot.com",
   messagingSenderId: "939776398130",
   appId: "1:939776398130:web:143edbd39d2b32e46a3d2b"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-let tgUser = null;
-let userId = null;
-let userData = { points:0, balance:0, referrals:0, history:[] };
-const pointsPerAd = 1;
-const ratePerPoint = 0.05;
-const withdrawMinAmount = 5;
+let tgUser=null;
+let userId=null;
+let userData={points:0,balance:0,referrals:0,history:[]};
+let settings={withdrawStatus:'comingSoon',withdrawMin:5,referralBonus:1,dailyTaskLimit:5};
+const ratePerPoint=0.05;
 
 document.addEventListener('DOMContentLoaded',()=>{
   if(window.Telegram && Telegram.WebApp){
     Telegram.WebApp.ready();
     Telegram.WebApp.expand();
-    tgUser = Telegram.WebApp.initDataUnsafe.user;
-    userId = tgUser.id;
-    loadUserData();
+    tgUser=Telegram.WebApp.initDataUnsafe.user;
+    userId=tgUser.id;
+    initUser();
     loadTasks();
+    loadSettings();
     loadTelegramProfile();
-    showView('home-view');
-    renderLeaderboard();
   }
 });
 
-// ---------------- USER DATA ----------------
-function loadUserData(){
-  const docRef = db.collection('users').doc(String(userId));
-  docRef.get().then(doc=>{
+function initUser(){
+  const userRef=db.collection('users').doc(String(userId));
+  userRef.get().then(doc=>{
     if(doc.exists){
-      userData = doc.data();
+      userData=doc.data();
     }else{
-      docRef.set(userData);
+      userData={
+        points:0,balance:0,referrals:0,history:[],username:tgUser.first_name||'User',avatar:tgUser.photo_url||''
+      };
+      userRef.set(userData);
     }
     updateDisplay();
+    updateReferral();
   });
 }
-function saveUserData(){ db.collection('users').doc(String(userId)).set(userData); }
+
 function updateDisplay(){
-  document.getElementById('points-value').textContent = userData.points;
-  document.getElementById('balance-value').textContent = "$"+userData.balance.toFixed(2);
-  document.getElementById('referral-count').textContent = userData.referrals || 0;
+  document.getElementById('points-value').textContent=userData.points;
+  document.getElementById('balance-value').textContent="$"+userData.balance.toFixed(2);
+  document.getElementById('referral-count').textContent=userData.referrals||0;
 }
-function loadTelegramProfile(){
-  if(tgUser){
-    document.getElementById('username').textContent = tgUser.first_name || 'User';
-    const avatar = document.getElementById('profile-pic');
-    if(tgUser.photo_url) avatar.innerHTML=`<img src="${tgUser.photo_url}">`;
-    else avatar.textContent=(tgUser.first_name||'U').charAt(0);
+
+function updateReferral(){
+  const params=(new URLSearchParams(window.location.search));
+  if(params.has('ref')){
+    const refId=params.get('ref');
+    if(refId!=userId){
+      const refRef=db.collection('users').doc(refId);
+      refRef.get().then(doc=>{
+        if(doc.exists){
+          const data=doc.data();
+          refRef.update({referrals:(data.referrals||0)+1});
+        }
+      });
+    }
   }
 }
 
-// ---------------- TASKS ----------------
+// --- TASKS ---
 function loadTasks(){
-  const container = document.getElementById('tasks-container');
-  container.innerHTML = '';
-  db.collection('tasks').orderBy('id','asc').get().then(snapshot=>{
-    snapshot.forEach(doc=>{
-      const task = doc.data();
-      const div = document.createElement('div');
+  const container=document.getElementById('tasks-container');
+  container.innerHTML='';
+  db.collection('tasks').where('active','==',true).orderBy('id').get().then(snap=>{
+    snap.forEach(doc=>{
+      const task=doc.data();
+      const div=document.createElement('div');
       div.className='task-card';
       div.innerHTML=`<div class="task-icon"><i class="fa-solid fa-rectangle-ad"></i></div>
                      <div class="task-details"><h3>${task.title}</h3><p>Reward: ${task.rewardPoints} pts</p></div>
                      <div class="task-arrow"><i class="fa-solid fa-play"></i></div>`;
-      div.onclick=()=>completeTask(task.id,task.link,task.rewardPoints);
+      div.onclick=()=>completeTask(doc.id,task.link,task.rewardPoints);
       container.appendChild(div);
     });
   });
 }
+
 function completeTask(taskId,link,reward){
   window.open(link,'_blank');
   userData.points+=reward;
   userData.balance=userData.points*ratePerPoint;
   addToHistory('earn',`+${reward} pts`);
-  saveUserData();
+  saveUser();
   updateDisplay();
   Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-  alert(`You earned +${reward} points!`);
 }
 
-// ---------------- HISTORY ----------------
 function addToHistory(type,detail){
-  const timestamp = new Date().toISOString();
-  userData.history.unshift({type,detail,timestamp});
+  const ts=new Date().toISOString();
+  userData.history.unshift({type,detail,timestamp:ts});
   if(userData.history.length>50) userData.history.pop();
-  saveUserData();
-}
-function renderHistory(){
-  const list=document.getElementById('history-list');
-  if(!userData.history.length){ list.innerHTML=`<div class="list-item"><div class="info"><div class="name">No activity yet.</div><div class="detail">Watch ads to start!</div></div></div>`; return; }
-  list.innerHTML=userData.history.map(item=>{
-    const icon=item.type==='earn'?'<i class="fa-solid fa-plus-circle" style="color:var(--primary-color)"></i>':'<i class="fa-solid fa-paper-plane" style="color:var(--accent-color)"></i>';
-    return `<div class="list-item"><div class="history-icon">${icon}</div><div class="info"><div class="name">${item.detail}</div><div class="detail">${new Date(item.timestamp).toLocaleString()}</div></div></div>`;
-  }).join('');
+  saveUser();
 }
 
-// ---------------- LEADERBOARD ----------------
-function renderLeaderboard(){
-  db.collection('users').orderBy('points','desc').limit(30).get().then(snapshot=>{
-    const list=document.getElementById('leaderboard-list');
-    list.innerHTML=snapshot.docs.map((doc,index)=>{
-      const u=doc.data();
-      return `<div class="list-item"><div class="rank">#${index+1}</div><div class="avatar">${u.avatar?'<img src="'+u.avatar+'">':''}</div><div class="info"><div class="name">${u.username||'User'+doc.id}</div></div><div class="score">${u.points} pts</div></div>`;
-    }).join('');
-  });
+function saveUser(){ db.collection('users').doc(String(userId)).set(userData); }
+
+function loadTelegramProfile(){
+  if(tgUser){
+    document.getElementById('username').textContent=tgUser.first_name||'User';
+    const avatar=document.getElementById('profile-pic');
+    if(tgUser.photo_url) avatar.innerHTML=`<img src="${tgUser.photo_url}">`;
+    else avatar.textContent=(tgUser.first_name||'U').charAt(0);
+  }
 }
 
-// ---------------- VIEWS ----------------
 function showView(id){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.nav-button').forEach(b=>b.classList.remove('active'));
-  const btn=document.querySelector(`.nav-button[onclick="showView('${id}')"]`);
-  if(btn) btn.classList.add('active');
-  if(id==='history-view') renderHistory();
 }
 
-// ---------------- WITHDRAW ----------------
-function openWithdrawModal(){
-  if(userData.balance<withdrawMinAmount){
-    Telegram.WebApp.HapticFeedback.notificationOccurred('error');
-    return alert(`Minimum withdrawal: $${withdrawMinAmount}`);
+// --- SETTINGS ---
+function loadSettings(){
+  db.collection('settings').doc('appSettings').get().then(doc=>{
+    if(doc.exists) settings=doc.data();
+    loadWithdrawView();
+  });
+}
+
+// --- WITHDRAW ---
+function loadWithdrawView(){
+  const container=document.getElementById('withdraw-content');
+  container.innerHTML='';
+  if(settings.withdrawStatus==='comingSoon'){
+    container.innerHTML='<p>Coming Soon</p>';
+  } else if(settings.withdrawStatus==='enabled'){
+    container.innerHTML=`<label>Wallet Info:</label><input type="text" id="walletInput" placeholder="Enter wallet info"/>
+                         <button class="action-button primary-button" onclick="submitWithdraw()">Submit</button>`;
+  } else {
+    container.innerHTML='<p>Withdraw disabled</p>';
   }
-  document.getElementById('withdraw-modal').classList.add('active');
 }
-function closeWithdrawModal(){document.getElementById('withdraw-modal').classList.remove('active');}
-function requestWithdraw(){
-  closeWithdrawModal();
+
+function submitWithdraw(){
+  const wallet=document.getElementById('walletInput').value;
+  if(!wallet) return alert("Enter wallet info");
   const botToken='7860194676:AAFWk0OzW0cvtwVzimfj8Y0QPebGjsUX8-Y';
-  const adminUserId='6357701459';
-  const userInfo=tgUser?`@${tgUser.username} (ID:${tgUser.id})`:'Unknown';
-  const msg=`💸 *Withdrawal Request*\n\n👤 *User:* ${userInfo}\n💰 *Amount:* $${userData.balance.toFixed(2)}\n\nPlease process.`;
+  const adminId='6357701459';
+  const msg=`💸 Withdrawal Request\n👤 User: @${tgUser.username} (ID:${tgUser.id})\n💰 Amount: $${userData.balance.toFixed(2)}\nWallet: ${wallet}`;
   fetch(`https://api.telegram.org/bot${botToken}/sendMessage`,{
-    method:"POST", headers:{'Content-Type':'application/json'}, body:JSON.stringify({chat_id:adminUserId,text:msg,parse_mode:"Markdown"})
-  }).then(res=>res.json()).then(data=>{
-    if(data.ok){
-      Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-      alert("Withdrawal request sent!");
-      addToHistory('withdraw',`Request for $${userData.balance.toFixed(2)}`);
-      userData.balance=0; userData.points=0; saveUserData(); updateDisplay();
-    }else{
-      Telegram.WebApp.HapticFeedback.notificationOccurred('error');
-      alert("Failed. Try again later.");
-    }
-  }).catch(err=>{ Telegram.WebApp.HapticFeedback.notificationOccurred('error'); alert("Error occurred."); });
+    method:"POST", headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({chat_id:adminId,text:msg})
+  }).then(res=>res.json()).then(d=>{
+    alert("Request sent!");
+    addToHistory('withdraw',`$${userData.balance} withdraw request`);
+    userData.balance=0;userData.points=0;saveUser();updateDisplay();
+  });
 }
 
-// ---------------- SHARE ----------------
+// --- SHARE ---
 function shareApp(){
-  if(!tgUser)return alert("Could not get user data from Telegram.");
+  if(!tgUser) return;
   const botUsername="iran7USD_bot";
-  const referralLink=`https://t.me/${botUsername}?start=${tgUser.id}`;
-  const text="🎉 Join this bot and start earning! Use my link for bonus:";
-  const shareUrl=`https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(text)}`;
-  Telegram.WebApp.openTelegramLink(shareUrl);
+  const link=`https://t.me/${botUsername}?start=${userId}`;
+  Telegram.WebApp.openTelegramLink(link);
 }
-
-// ---------------- IN-APP ADS ----------------
-function grantReward(points=pointsPerAd){
-  userData.points+=points; userData.balance=userData.points*ratePerPoint; updateDisplay();
-  addToHistory('earn',`+${points} pts`);
-  saveUserData();
-  Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-  alert(`You earned +${points} points!`);
-}
-function showRewardedInterstitial(){ if(typeof show_10456374==='function') show_10456374().then(()=>grantReward()).catch(e=>alert('Ad not ready.')); }
-function showRewardedPopup(){ if(typeof show_10456374==='function') show_10456374('pop').then(()=>grantReward()).catch(e=>alert('Ad not ready.')); }
-
 </script>
 </body>
 </html>
