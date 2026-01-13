@@ -23,19 +23,19 @@ main{flex-grow:1;overflow-y:auto;padding:20px;padding-bottom:80px;}
 .view{display:none;animation:fadeIn 0.4s ease-in-out;}
 .view.active{display:block;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-.user-header-card{background:var(--card-bg);border-radius:16px;padding:15px;margin-bottom:25px;display:flex;align-items:center;border:1px solid rgba(255,255,255,0.05);}
+.user-header-card{background:var(--card-bg);border-radius:16px;padding:15px;margin-bottom:15px;display:flex;align-items:center;border:1px solid rgba(255,255,255,0.05);}
 .user-avatar{width:50px;height:50px;border-radius:50%;margin-right:15px;overflow:hidden;background:linear-gradient(135deg,var(--primary-color),#00a651);display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:20px;}
 .user-avatar img{width:100%;height:100%;object-fit:cover;}
 .user-info .username{font-size:18px;font-weight:700;margin:0;}
 .user-info .title{font-size:14px;color:var(--text-muted-color);margin:0;}
-.balance-card{background:linear-gradient(135deg,#00a651,#00753a);border-radius:16px;padding:20px;text-align:center;margin-bottom:25px;}
+.balance-card{background:linear-gradient(135deg,#00a651,#00753a);border-radius:16px;padding:20px;text-align:center;margin-bottom:15px;}
 .balance-card .label{font-size:16px;opacity:0.8;margin-bottom:5px;}
 .balance-card .balance-value{font-size:36px;font-weight:800;margin:0;letter-spacing:1px;}
 .balance-card .points-value{font-size:16px;font-weight:600;color:var(--accent-color);margin-top:10px;}
 .section-title{font-size:20px;font-weight:700;margin-bottom:15px;padding-left:5px;border-left:4px solid var(--primary-color);}
-.task-card{background:var(--card-bg);border-radius:12px;padding:20px;margin-bottom:15px;display:flex;align-items:center;cursor:pointer;transition:transform 0.2s ease,background-color 0.2s ease;border:1px solid rgba(255,255,255,0.05);}
-.task-card:hover{transform:translateY(-3px);background-color:var(--secondary-color);}
-.task-icon{font-size:24px;color:var(--primary-color);margin-right:20px;width:30px;text-align:center;}
+.task-card{background:var(--card-bg);border-radius:12px;padding:15px;margin-bottom:10px;display:flex;align-items:center;cursor:pointer;transition:transform 0.2s ease,background-color 0.2s ease;border:1px solid rgba(255,255,255,0.05);}
+.task-card:hover{transform:translateY(-2px);background-color:var(--secondary-color);}
+.task-icon{font-size:24px;color:var(--primary-color);margin-right:15px;width:30px;text-align:center;}
 .task-details h3{margin:0;font-size:16px;font-weight:600;}
 .task-details p{margin:3px 0 0;font-size:13px;color:var(--text-muted-color);}
 .task-arrow{margin-left:auto;font-size:18px;color:var(--text-muted-color);}
@@ -51,18 +51,18 @@ main{flex-grow:1;overflow-y:auto;padding:20px;padding-bottom:80px;}
 .nav-button .icon{font-size:22px;margin-bottom:4px;}
 .nav-button:hover{color:var(--text-color);}
 .nav-button.active{color:var(--primary-color);transform:scale(1.1);}
-.action-button{width:100%;padding:15px;border-radius:12px;border:none;font-size:16px;font-weight:700;margin-top:15px;cursor:pointer;transition:all 0.3s ease;text-transform:uppercase;letter-spacing:1px;}
+.action-button{width:100%;padding:12px;border-radius:12px;border:none;font-size:16px;font-weight:700;margin-top:10px;cursor:pointer;transition:all 0.3s ease;text-transform:uppercase;letter-spacing:1px;}
 .primary-button{background:var(--primary-color);color:#000;}
-.primary-button:hover{background:var(--primary-hover);transform:translateY(-2px);box-shadow:0 5px 15px rgba(46,217,20,0.3);}
+.primary-button:hover{background:var(--primary-hover);}
 .secondary-button{background:var(--secondary-color);color:var(--primary-color);}
 .secondary-button:hover{background:#3a3a3e;}
 .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:1000;animation:fadeIn 0.3s;}
 .modal-overlay.active{display:flex;}
-.modal-content{background:var(--card-bg);padding:25px;border-radius:16px;width:90%;max-width:320px;text-align:center;animation:slideIn 0.3s;}
+.modal-content{background:var(--card-bg);padding:20px;border-radius:12px;width:90%;max-width:320px;text-align:center;animation:slideIn 0.3s;}
 @keyframes slideIn{from{transform:translateY(20px);opacity:0;}to{transform:translateY(0);opacity:1;}}
-.modal-content h3{margin-top:0;font-size:20px;}
-.modal-content p{color:var(--text-muted-color);margin-bottom:25px;}
-.modal-actions{display:flex;gap:10px;}
+.modal-content h3{margin-top:0;font-size:18px;}
+.modal-content p{color:var(--text-muted-color);margin-bottom:15px;}
+.modal-actions{display:flex;gap:10px;justify-content:center;}
 </style>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -74,41 +74,58 @@ main{flex-grow:1;overflow-y:auto;padding:20px;padding-bottom:80px;}
 <div class="container">
 <main id="main-content">
 
+<!-- HOME VIEW -->
 <div id="home-view" class="view active">
   <div class="user-header-card">
-    <div class="user-avatar" id="profile-pic">EE</div>
+    <div class="user-avatar" id="profile-pic">U</div>
     <div class="user-info">
       <h2 class="username" id="username">Loading...</h2>
       <p class="title">Welcome Back!</p>
     </div>
   </div>
   <div class="balance-card">
-      <p class="label">Total Balance</p>
-      <h1 class="balance-value" id="balance-value">$0.00</h1>
-      <p class="points-value"><i class="fa-solid fa-coins"></i> <span id="points-value">0</span> Points</p>
-      <p class="points-value"><i class="fa-solid fa-user-group"></i> Referrals: <span id="referral-count">0</span></p>
+    <p class="label">Total Balance</p>
+    <h1 class="balance-value" id="balance-value">$0.00</h1>
+    <p class="points-value"><i class="fa-solid fa-coins"></i> <span id="points-value">0</span> Points</p>
+    <p class="points-value"><i class="fa-solid fa-user-group"></i> Referrals: <span id="referral-count">0</span></p>
   </div>
+  <div id="referral-info" style="background:var(--card-bg);padding:10px;border-radius:10px;margin-bottom:15px;border:1px solid rgba(255,255,255,0.05);"></div>
   <h2 class="section-title">Quick Actions</h2>
   <div class="task-card" onclick="showView('tasks-view')">
-      <div class="task-icon"><i class="fa-solid fa-list-check"></i></div>
-      <div class="task-details"><h3>View Tasks</h3><p>Watch ads and complete tasks to earn points.</p></div>
-      <div class="task-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+    <div class="task-icon"><i class="fa-solid fa-list-check"></i></div>
+    <div class="task-details"><h3>View Tasks</h3><p>Complete tasks to earn points.</p></div>
+    <div class="task-arrow"><i class="fa-solid fa-chevron-right"></i></div>
   </div>
-  <div class="task-card" onclick="showView('withdraw-view')">
-      <div class="task-icon"><i class="fa-solid fa-wallet"></i></div>
-      <div class="task-details"><h3>Withdraw Funds</h3><p>Request withdrawal safely.</p></div>
-      <div class="task-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+  <div class="task-card" onclick="showWithdrawScreen()">
+    <div class="task-icon"><i class="fa-solid fa-wallet"></i></div>
+    <div class="task-details"><h3>Withdraw Funds</h3><p>Request your earnings.</p></div>
+    <div class="task-arrow"><i class="fa-solid fa-chevron-right"></i></div>
   </div>
 </div>
 
+<!-- TASKS VIEW -->
 <div id="tasks-view" class="view">
   <h2 class="section-title">Earning Tasks</h2>
   <div id="tasks-container"></div>
 </div>
 
+<!-- LEADERBOARD VIEW -->
+<div id="leaderboard-view" class="view">
+  <h2 class="section-title">Top Earners</h2>
+  <div id="leaderboard-list"></div>
+</div>
+
+<!-- HISTORY VIEW -->
+<div id="history-view" class="view">
+  <h2 class="section-title">Recent Activity</h2>
+  <div id="history-list"></div>
+</div>
+
+<!-- WITHDRAW VIEW -->
 <div id="withdraw-view" class="view">
   <h2 class="section-title">Withdraw</h2>
   <div id="withdraw-content"></div>
+  <button class="action-button secondary-button" onclick="showView('home-view')">Back</button>
 </div>
 
 </main>
@@ -120,172 +137,171 @@ main{flex-grow:1;overflow-y:auto;padding:20px;padding-bottom:80px;}
   <button class="nav-button" onclick="showView('history-view')"><i class="icon fa-solid fa-clock-rotate-left"></i>History</button>
   <button class="nav-button" onclick="shareApp()"><i class="icon fa-solid fa-share-nodes"></i>Share</button>
 </nav>
+</div>
 
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyC7a4OIp3viWGNq_jIYoq-4qtKIYqMocmE",
-  authDomain: "iran7usd.firebaseapp.com",
-  projectId: "iran7usd",
-  storageBucket: "iran7usd.appspot.com",
-  messagingSenderId: "939776398130",
-  appId: "1:939776398130:web:143edbd39d2b32e46a3d2b"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+  const firebaseConfig = {
+    apiKey: "AIzaSyC7a4OIp3viWGNq_jIYoq-4qtKIYqMocmE",
+    authDomain: "iran7usd.firebaseapp.com",
+    projectId: "iran7usd",
+    storageBucket: "iran7usd.firebasestorage.app",
+    messagingSenderId: "939776398130",
+    appId: "1:939776398130:web:143edbd39d2b32e46a3d2b"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-let tgUser=null;
-let userId=null;
-let userData={points:0,balance:0,referrals:0,history:[]};
-let settings={withdrawStatus:'comingSoon',withdrawMin:5,referralBonus:1,dailyTaskLimit:5};
-const ratePerPoint=0.05;
+  let tgUser=null, userId=null, userData={points:0,balance:0,referrals:0,history:[],referralCode:''};
+  let settings={withdrawStatus:'enabled',withdrawMin:5,referralBonus:1};
+  const pointsPerAd=1, ratePerPoint=0.05;
 
-document.addEventListener('DOMContentLoaded',()=>{
-  if(window.Telegram && Telegram.WebApp){
-    Telegram.WebApp.ready();
-    Telegram.WebApp.expand();
-    tgUser=Telegram.WebApp.initDataUnsafe.user;
-    userId=tgUser.id;
-    initUser();
-    loadTasks();
-    loadSettings();
-    loadTelegramProfile();
-  }
-});
-
-function initUser(){
-  const userRef=db.collection('users').doc(String(userId));
-  userRef.get().then(doc=>{
-    if(doc.exists){
-      userData=doc.data();
-    }else{
-      userData={
-        points:0,balance:0,referrals:0,history:[],username:tgUser.first_name||'User',avatar:tgUser.photo_url||''
-      };
-      userRef.set(userData);
+  document.addEventListener('DOMContentLoaded',()=>{
+    if(window.Telegram && Telegram.WebApp){
+      Telegram.WebApp.ready(); Telegram.WebApp.expand();
+      tgUser = Telegram.WebApp.initDataUnsafe.user; userId = tgUser.id;
+      loadSettings().then(()=>initUser());
     }
-    updateDisplay();
-    updateReferral();
   });
-}
 
-function updateDisplay(){
-  document.getElementById('points-value').textContent=userData.points;
-  document.getElementById('balance-value').textContent="$"+userData.balance.toFixed(2);
-  document.getElementById('referral-count').textContent=userData.referrals||0;
-}
-
-function updateReferral(){
-  const params=(new URLSearchParams(window.location.search));
-  if(params.has('ref')){
-    const refId=params.get('ref');
-    if(refId!=userId){
-      const refRef=db.collection('users').doc(refId);
-      refRef.get().then(doc=>{
-        if(doc.exists){
-          const data=doc.data();
-          refRef.update({referrals:(data.referrals||0)+1});
-        }
-      });
-    }
+  // ---------------- SETTINGS ----------------
+  async function loadSettings(){
+    const s = await db.collection('settings').doc('global').get();
+    if(s.exists) settings = {...settings,...s.data()};
   }
-}
 
-// --- TASKS ---
-function loadTasks(){
-  const container=document.getElementById('tasks-container');
-  container.innerHTML='';
-  db.collection('tasks').where('active','==',true).orderBy('id').get().then(snap=>{
-    snap.forEach(doc=>{
-      const task=doc.data();
-      const div=document.createElement('div');
-      div.className='task-card';
-      div.innerHTML=`<div class="task-icon"><i class="fa-solid fa-rectangle-ad"></i></div>
-                     <div class="task-details"><h3>${task.title}</h3><p>Reward: ${task.rewardPoints} pts</p></div>
-                     <div class="task-arrow"><i class="fa-solid fa-play"></i></div>`;
-      div.onclick=()=>completeTask(doc.id,task.link,task.rewardPoints);
-      container.appendChild(div);
+  // ---------------- USER ----------------
+  function initUser(){
+    const userRef = db.collection('users').doc(String(userId));
+    userRef.get().then(doc=>{
+      if(doc.exists) userData = doc.data();
+      else{
+        const newReferralCode='REF'+Math.floor(100000+Math.random()*900000);
+        userData = {points:0,balance:0,referrals:0,history:[],username:tgUser.first_name||'User',avatar:tgUser.photo_url||'',referralCode:newReferralCode};
+        userRef.set(userData);
+        handleReferral(newReferralCode);
+      }
+      updateDisplay();
+      showReferralInfo();
+      loadTasks();
+      renderLeaderboard();
+      renderHistory();
     });
-  });
-}
-
-function completeTask(taskId,link,reward){
-  window.open(link,'_blank');
-  userData.points+=reward;
-  userData.balance=userData.points*ratePerPoint;
-  addToHistory('earn',`+${reward} pts`);
-  saveUser();
-  updateDisplay();
-  Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-}
-
-function addToHistory(type,detail){
-  const ts=new Date().toISOString();
-  userData.history.unshift({type,detail,timestamp:ts});
-  if(userData.history.length>50) userData.history.pop();
-  saveUser();
-}
-
-function saveUser(){ db.collection('users').doc(String(userId)).set(userData); }
-
-function loadTelegramProfile(){
-  if(tgUser){
-    document.getElementById('username').textContent=tgUser.first_name||'User';
-    const avatar=document.getElementById('profile-pic');
-    if(tgUser.photo_url) avatar.innerHTML=`<img src="${tgUser.photo_url}">`;
-    else avatar.textContent=(tgUser.first_name||'U').charAt(0);
   }
-}
 
-function showView(id){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-// --- SETTINGS ---
-function loadSettings(){
-  db.collection('settings').doc('appSettings').get().then(doc=>{
-    if(doc.exists) settings=doc.data();
-    loadWithdrawView();
-  });
-}
-
-// --- WITHDRAW ---
-function loadWithdrawView(){
-  const container=document.getElementById('withdraw-content');
-  container.innerHTML='';
-  if(settings.withdrawStatus==='comingSoon'){
-    container.innerHTML='<p>Coming Soon</p>';
-  } else if(settings.withdrawStatus==='enabled'){
-    container.innerHTML=`<label>Wallet Info:</label><input type="text" id="walletInput" placeholder="Enter wallet info"/>
-                         <button class="action-button primary-button" onclick="submitWithdraw()">Submit</button>`;
-  } else {
-    container.innerHTML='<p>Withdraw disabled</p>';
+  function handleReferral(myReferralCode){
+    const params = new URLSearchParams(window.location.search);
+    if(params.has('ref')){
+      const refCode=params.get('ref');
+      if(refCode && refCode!=myReferralCode){
+        db.collection('users').where('referralCode','==',refCode).get().then(snapshot=>{
+          snapshot.forEach(doc=>{
+            const data = doc.data();
+            db.collection('users').doc(doc.id).update({referrals:(data.referrals||0)+settings.referralBonus});
+          });
+        });
+      }
+    }
   }
-}
 
-function submitWithdraw(){
-  const wallet=document.getElementById('walletInput').value;
-  if(!wallet) return alert("Enter wallet info");
-  const botToken='7860194676:AAFWk0OzW0cvtwVzimfj8Y0QPebGjsUX8-Y';
-  const adminId='6357701459';
-  const msg=`💸 Withdrawal Request\n👤 User: @${tgUser.username} (ID:${tgUser.id})\n💰 Amount: $${userData.balance.toFixed(2)}\nWallet: ${wallet}`;
-  fetch(`https://api.telegram.org/bot${botToken}/sendMessage`,{
-    method:"POST", headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({chat_id:adminId,text:msg})
-  }).then(res=>res.json()).then(d=>{
-    alert("Request sent!");
-    addToHistory('withdraw',`$${userData.balance} withdraw request`);
-    userData.balance=0;userData.points=0;saveUser();updateDisplay();
-  });
-}
+  function showReferralInfo(){
+    const container=document.getElementById('referral-info');
+    const botUsername="iran7USD_bot";
+    container.innerHTML=`<p>Your referral code: <b>${userData.referralCode}</b></p>
+      <p>Share link: <a href="https://t.me/${botUsername}?start=${userData.referralCode}" target="_blank">Click to share</a></p>`;
+  }
 
-// --- SHARE ---
-function shareApp(){
-  if(!tgUser) return;
-  const botUsername="iran7USD_bot";
-  const link=`https://t.me/${botUsername}?start=${userId}`;
-  Telegram.WebApp.openTelegramLink(link);
-}
+  function updateDisplay(){
+    document.getElementById('points-value').textContent = userData.points;
+    document.getElementById('balance-value').textContent = "$"+userData.balance.toFixed(2);
+    document.getElementById('referral-count').textContent = userData.referrals||0;
+  }
+
+  // ---------------- TASKS ----------------
+  function loadTasks(){
+    const container=document.getElementById('tasks-container'); container.innerHTML='';
+    db.collection('tasks').orderBy('id','asc').get().then(snapshot=>{
+      snapshot.forEach(doc=>{
+        const t = doc.data();
+        const div=document.createElement('div');
+        div.className='task-card';
+        div.innerHTML=`<div class="task-icon"><i class="fa-solid fa-rectangle-ad"></i></div>
+                       <div class="task-details"><h3>${t.title}</h3><p>Reward: ${t.rewardPoints} pts</p></div>
+                       <div class="task-arrow"><i class="fa-solid fa-play"></i></div>`;
+        div.onclick=()=>completeTask(t.id,t.link,t.rewardPoints);
+        container.appendChild(div);
+      });
+    });
+  }
+
+  function completeTask(id,link,reward){
+    window.open(link,'_blank');
+    userData.points+=reward; userData.balance=userData.points*ratePerPoint;
+    addToHistory('earn',`+${reward} pts`); saveUserData(); updateDisplay();
+    Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+    alert(`You earned +${reward} points!`);
+  }
+
+  // ---------------- HISTORY ----------------
+  function addToHistory(type,detail){
+    const ts=new Date().toISOString();
+    userData.history.unshift({type,detail,timestamp:ts});
+    if(userData.history.length>50) userData.history.pop();
+    saveUserData();
+  }
+  function renderHistory(){
+    const list=document.getElementById('history-list'); if(!userData.history.length){list.innerHTML="<p>No activity yet.</p>"; return;}
+    list.innerHTML=userData.history.map(h=>`<div class="list-item"><div class="info"><div class="name">${h.detail}</div><div class="detail">${new Date(h.timestamp).toLocaleString()}</div></div></div>`).join('');
+  }
+
+  // ---------------- LEADERBOARD ----------------
+  function renderLeaderboard(){
+    db.collection('users').orderBy('points','desc').limit(30).get().then(snapshot=>{
+      const list=document.getElementById('leaderboard-list');
+      list.innerHTML = snapshot.docs.map((doc,i)=>{
+        const u=doc.data();
+        return `<div class="list-item"><div class="rank">#${i+1}</div><div class="info"><div class="name">${u.username}</div></div><div class="score">${u.points} pts</div></div>`;
+      }).join('');
+    });
+  }
+
+  // ---------------- VIEWS ----------------
+  function showView(id){
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav-button').forEach(b=>b.classList.remove('active'));
+    const btn=document.querySelector(`.nav-button[onclick="showView('${id}')"]`);
+    if(btn) btn.classList.add('active');
+    if(id==='history-view') renderHistory();
+  }
+
+  // ---------------- FIRESTORE SAVE ----------------
+  function saveUserData(){ db.collection('users').doc(String(userId)).set(userData); }
+
+  // ---------------- WITHDRAW ----------------
+  function showWithdrawScreen(){
+    showView('withdraw-view');
+    const div = document.getElementById('withdraw-content');
+    if(settings.withdrawStatus==='disabled'){ div.innerHTML="<p>Withdraw Coming Soon!</p>"; return;}
+    div.innerHTML=`<p>Your Balance: $${userData.balance.toFixed(2)}</p>
+      <input type="text" id="wallet-input" placeholder="Enter Wallet Info" style="width:100%;padding:10px;border-radius:8px;margin:10px 0;">
+      <button class="action-button primary-button" onclick="submitWithdraw()">Submit</button>`;
+  }
+  function submitWithdraw(){
+    const wallet=document.getElementById('wallet-input').value.trim();
+    if(!wallet) return alert("Enter wallet info");
+    if(userData.balance<settings.withdrawMin) return alert(`Minimum withdrawal $${settings.withdrawMin}`);
+    alert(`Withdrawal requested: $${userData.balance.toFixed(2)} to ${wallet}`);
+    addToHistory('withdraw',`Requested $${userData.balance.toFixed(2)}`);
+    userData.balance=0; userData.points=0; saveUserData(); updateDisplay(); showView('home-view');
+  }
+
+  // ---------------- SHARE ----------------
+  function shareApp(){
+    const botUsername="iran7USD_bot";
+    const link=`https://t.me/${botUsername}?start=${userData.referralCode}`;
+    const text="Join and earn with me! Use my link for bonus:";
+    Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`);
+  }
 </script>
 </body>
 </html>
